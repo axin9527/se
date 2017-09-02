@@ -1,0 +1,20 @@
+<?php
+
+namespace app\admin\controller;
+
+use think\Controller;
+use think\Request;
+
+class Common extends Controller
+{
+    // 后台全部都要继承这个session的类
+    public function __construct(Request $request = NULL)
+    {
+        parent::__construct($request);
+        
+        if ( !session('admin.admin_id')) 
+        {
+            $this->redirect('admin/login/index');
+        }
+    }
+}
