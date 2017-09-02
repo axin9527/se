@@ -1,0 +1,51 @@
+<?php
+namespace app\common\model;
+
+use think\Loader;
+use think\Model;
+use think\Db;
+//use app\admin\validate;
+
+class Admin extends Model
+{
+    //对于一个model类来说 要先定义主键和表
+    protected $pk = "admin_id";
+    protected $table = "blog_admin";
+    //处理发送过来的登陆post数据
+    public function login($data) {
+        //分3个阶段处理发送来的数据 
+        //1 验证
+       
+        $validte = Loader::validate('Admin');
+        //halt($validte);
+        if (!$validte->check($data)){
+            return ['valid'=>0, 'msg'=>$validte->getError()];
+        }
+        //比对是否一致
+        $admin_username = $data['admin_username'];
+        $admin_password = md5($data['admin_password']);
+        $sql = 'SELECT * FROM blog_admin WHERE admin_username = :admin_username';
+        $userInfoName = Db::query($sql, ['admin_username'=>$admin_username]);
+       
+        if (!$userInfoName){
+            return ['valid'=>0, 'msg'=>'用户名不存在'];
+        }
+        
+       
+        
+        $sql = 'SELECT admin_id,admin_username,admin_password FROM blog_admin WHERE admin_username =:admin_username AND admin_password=:admin_password';
+        $userInfo = Db::query($sql, ['admin_username'=>$admin_username, 'admin_password'=>$admin_password]);
+        if (!$userInfo){
+            return ['valid'=>0, 'msg'=>'密码和用户名不匹配'];
+        }
+        
+        //3存入session中
+//         halt($userInfo);
+        session('admin_username', $userInfo[0]['admin_username']);
+        session('admin_id', $userInfo[0]['admin_id']);
+        return ['valid'=> 1, 'msg'=>'登陆成功'];
+        
+    }
+    
+   
+}
