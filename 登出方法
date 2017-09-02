@@ -1,0 +1,19 @@
+    public function checkLogin(){
+        if (request()->isPost()){
+            $status = 0;
+            $result = '';
+         /*    $data = input('post.'); */
+            
+            $data = (new Ll())->login(input('post.'));
+            if ($data['valid']){
+                $result = $data['msg'];
+            }else {
+                $result = $data['msg'];
+                
+            }
+            
+            $arr = ['status'=>$data['valid'], 'message'=>$result, 'data'=>$data];
+            return json($arr);
+        }
+    }
+    
