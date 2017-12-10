@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PHP上传文件</title>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<form action="" method="post" id="uploadForm" enctype="multipart/form-data">
+	<input type="file" name="file"/>
+	<input type="button" onclick="doUpload()" value="上传"/>
+
+</form>
+<img src="" alt="" />
+</body>
+<script>
+ function doUpload() {
+    var formData = new FormData($( "#uploadForm" )[0]);  
+    $.ajax({  
+         url: 'file.php',
+         type: 'POST',
+         data: formData,
+         async: false,
+         cache: false,
+         contentType: false,
+         processData: false,
+         success: function (returndata) {  
+             alert(returndata);  
+         },  
+         error: function (returndata) {  
+             alert(returndata);  
+         }  
+    });  
+}   
+
+</script>
+</html>
